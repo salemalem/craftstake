@@ -41,7 +41,6 @@ contract TRC20 {
     
     function transfer(address _to, uint256 _value) public returns(bool success) {
         _transfer(msg.sender, _to, _value);
-        
         return true;
     }
     
@@ -49,7 +48,6 @@ contract TRC20 {
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         require(_value <= allowance[_from][msg.sender]);
         _transfer(_from, _to, _value);
-
         return true;
     }
     
@@ -57,6 +55,17 @@ contract TRC20 {
     function approve(address _spender, uint256 _value) public returns (bool success) {
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
+        
+        return true;
+    }
+    
+    // disappear from blockchain supply forever
+    function ecoburn(uint256 _value) public returns (bool success) {
+        require(balanceOf[msg.sender] >= _value);
+        balanceOf[msg.sender] -= _value;
+        totalSupply -= _value;
+        
+        emit EcoBurn(msg.sender, _value);
         
         return true;
     }
