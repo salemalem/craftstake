@@ -44,14 +44,16 @@ contract TRC20 {
         return true;
     }
     
-    // 3rd party can spend someone's fund if that person approved it using approve function
+    // spend 3rd party's approved token amount
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        require(_value <= allowance[_from][msg.sender]);
+        require(allowance[_from][msg.sender] >= _value);
+        allowance[_from][msg.sender] -= _value;
         _transfer(_from, _to, _value);
+        
         return true;
     }
     
-    // approve 3rd party to spend your tokens
+    // approve 3rd party to spend/ecoburn your tokens
     function approve(address _spender, uint256 _value) public returns (bool success) {
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
@@ -66,6 +68,20 @@ contract TRC20 {
         totalSupply -= _value;
         
         emit EcoBurn(msg.sender, _value);
+        
+        return true;
+    }
+    
+    // eco burn tokens of 3rd party
+    function ecoburnFrom(address _from, uint256 _value) public returns (bool success) {
+        require(balanceOf[_from] >= _value);
+        require(allowance[_from][msg.sender] >= _value);
+        
+        balanceOf[_from] -= _value;
+        allowance[_from][msg.sender] -= _value;
+        totalSupply -= _value;
+        
+        emit EcoBurn(_from, _value);
         
         return true;
     }
