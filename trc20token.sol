@@ -21,7 +21,7 @@ contract TRC20 {
         owner = msg.sender;
         balanceOf[owner] = totalSupply;
         name = "CraftStake";
-        symbol = "CRF";
+        symbol = "CRS";
     }
     
     function _transfer(address _from, address _to, uint256 _value) internal {
