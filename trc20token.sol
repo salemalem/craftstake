@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26 < 0.5.0;
+pragma solidity ^0.5.0;
 
 contract TRC20 {
 
@@ -25,7 +25,7 @@ contract TRC20 {
     }
     
     function _transfer(address _from, address _to, uint256 _value) internal {
-        require(_to!=0x0);
+        require(_to!=address(0));
         require(balanceOf[_from] >= _value);
         require(balanceOf[_to] + _value >= balanceOf[_to]);
         
