@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26 < 0.5.0;
+pragma solidity ^0.5.0;
 
 contract CraftStakeToken {
 
@@ -15,6 +15,7 @@ contract CraftStakeToken {
     event Approval(address indexed _owner, address indexed _spender, uint256 value);
     event EcoBurn(address indexed from, uint256 value);
     event Mint(address indexed to, uint256 value);
+    event OwnershipTransferred(address indexed _from, address indexed _to);
     
     constructor() public {
         decimals = 8;
@@ -22,11 +23,11 @@ contract CraftStakeToken {
         owner = msg.sender;
         balanceOf[owner] = totalSupply;
         name = "CraftStake";
-        symbol = "CRS";
+        symbol = "CRF";
     }
     
     function _transfer(address _from, address _to, uint256 _value) internal {
-        require(_to!=0x0);
+        require(_to != address(0));
         require(balanceOf[_from] >= _value);
         require(balanceOf[_to] + _value >= balanceOf[_to]);
         
@@ -48,6 +49,7 @@ contract CraftStakeToken {
     // spend 3rd party's approved token amount
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         require(allowance[_from][msg.sender] >= _value);
+        
         allowance[_from][msg.sender] -= _value;
         _transfer(_from, _to, _value);
         
@@ -65,6 +67,7 @@ contract CraftStakeToken {
     // disappear from blockchain supply forever
     function ecoburn(uint256 _value) public returns (bool success) {
         require(balanceOf[msg.sender] >= _value);
+        
         balanceOf[msg.sender] -= _value;
         totalSupply -= _value;
         
@@ -89,7 +92,7 @@ contract CraftStakeToken {
     
     // generate new tokens (only owner can do it)
     function mint(uint256 _value) public returns (bool success) {
-        require(msg.sender==owner);
+        require(msg.sender == owner);
         
         balanceOf[owner] += _value;
         totalSupply += _value;
@@ -101,8 +104,8 @@ contract CraftStakeToken {
     
     // generate new tokens to 3rd party (only owner can do it)
     function mintTo(address _to, uint256 _value) public returns (bool success) {
-        require(msg.sender==owner);
-        require(_to!=address(0));
+        require(msg.sender == owner);
+        require(_to != address(0));
         
         balanceOf[_to] += _value;
         totalSupply += _value;
@@ -110,5 +113,17 @@ contract CraftStakeToken {
         emit Mint(_to, _value);
         
         return true;
+    }
+    
+    // owner assigns new owner
+    function transferOwnership(address newOwner) public returns (bool success) {
+        require(newOwner != address(0));
+        require(newOwner != owner);
+        require(msg.sender == owner);
+        
+        emit OwnershipTransferred(owner, newOwner);
+        owner = newOwner;
+        
+        return success;
     }
 }
