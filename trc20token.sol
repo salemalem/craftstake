@@ -1,12 +1,13 @@
 pragma solidity ^0.5.0;
 
-contract CraftStakeToken {
+contract JDoge {
 
     string public name; // token name
     string public symbol; // token symbol
     uint8 public decimals;
     uint256 public totalSupply;
     address public owner;
+    uint256 constant public maxSupply = 1000000*10**uint256(decimals);
     
     mapping (address => uint256) public balanceOf;
     mapping (address => mapping (address=> uint256)) public allowance;
@@ -22,8 +23,8 @@ contract CraftStakeToken {
         totalSupply = 1000000*10**uint256(decimals);
         owner = msg.sender;
         balanceOf[owner] = totalSupply;
-        name = "CraftStake";
-        symbol = "CRS";
+        name = "JDoge";
+        symbol = "JDG";
     }
     
     function _transfer(address _from, address _to, uint256 _value) internal {
@@ -93,6 +94,7 @@ contract CraftStakeToken {
     // generate new tokens (only owner can do it)
     function mint(uint256 _value) public returns (bool success) {
         require(msg.sender == owner);
+        require(totalSupply + _value <= maxSupply);
         
         balanceOf[owner] += _value;
         totalSupply += _value;
@@ -106,6 +108,7 @@ contract CraftStakeToken {
     function mintTo(address _to, uint256 _value) public returns (bool success) {
         require(msg.sender == owner);
         require(_to != address(0));
+        require(totalSupply + _value <= maxSupply);
         
         balanceOf[_to] += _value;
         totalSupply += _value;
