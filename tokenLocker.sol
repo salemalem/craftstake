@@ -24,7 +24,7 @@ contract Locker {
     }
     
     function withdrawTokens(uint256 value) public returns(bool success) {
-        require(owner == msg.sender);
+        require(owner == msg.sender, "Only owner can lock tokens.");
         require(now <= expirationDate, "expirationDate is not reached yet");
         token.transfer(msg.sender, value);
         
