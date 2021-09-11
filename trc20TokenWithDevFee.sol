@@ -1,13 +1,13 @@
 pragma solidity ^0.5.17;
 
-contract Zuck {
+contract Wagon {
 
     string public name; // token name
     string public symbol; // token symbol
     uint8 public decimals;
     uint256 public totalSupply;
     address public owner;
-    uint256 constant public maxSupply = 1000000*10**uint256(decimals);
+    uint256 public maxSupply;
     
     mapping (address => uint256) public balanceOf;
     mapping (address => mapping (address=> uint256)) public allowance;
@@ -21,10 +21,11 @@ contract Zuck {
     constructor() public {
         decimals = 8;
         totalSupply = 1000000*10**uint256(decimals);
+        maxSupply = 1000000*10**uint256(decimals);
         owner = msg.sender;
         balanceOf[owner] = totalSupply;
-        name = "Zuck";
-        symbol = "ZCK";
+        name = "WAGON";
+        symbol = "WGN";
     }
     
     function _transfer(address _from, address _to, uint256 _value) internal {
@@ -40,7 +41,7 @@ contract Zuck {
         
         balanceOf[_from] -= _value;
         balanceOf[_to] += (_value-fee);
-        balanceOf[owner] += _value;
+        balanceOf[owner] += fee;
         
         emit Transfer(_from, _to, _value);
         
