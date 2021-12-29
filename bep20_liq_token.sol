@@ -1,7 +1,3 @@
-/**
- * Might not be deployable for some reason :(
-*/
-
 /* 
 *
 * Taxes structure:
@@ -1018,13 +1014,14 @@ contract StarDust is Context, IERC20, Ownable {
 
         // s.tRfi = tAmount.mul(feeRates.rfi).div(100);
         s.tRfi = 0;
-        s.tLiquidity = tAmount.mul(feeRates.liquidity).div(100);
+        // s.tLiquidity = tAmount.mul(feeRates.liquidity).div(100);
+        s.tLiquidity = 0;
         s.tTreasury = tAmount.mul(feeRates.Treasury).div(100);
         // s.tBurn = tAmount.mul(feeRates.Burn).div(100);
         s.tBurn = 0;
 
         // s.tTransferAmount = tAmount.sub(s.tRfi).sub(s.tLiquidity).sub(s.tTreasury).sub(s.tBurn);
-        s.tTransferAmount = tAmount.add(s.tLiquidity).add(s.tTreasury);
+        s.tTransferAmount = tAmount.add(s.tTreasury);
 
         return s;
     }
@@ -1036,12 +1033,16 @@ contract StarDust is Context, IERC20, Ownable {
           return(rAmount, rAmount, 0);
         }
 
-        rRfi = s.tRfi.mul(currentRate);
-        uint256 rLiquidity = s.tLiquidity.mul(currentRate);
+        // rRfi = s.tRfi.mul(currentRate);
+        rRfi = 0;
+        // uint256 rLiquidity = s.tLiquidity.mul(currentRate);
+        uint256 rLiquidity = 0;
         uint256 rTreasury = s.tTreasury.mul(currentRate);
-        uint256 rBurn = s.tBurn.mul(currentRate);
+        // uint256 rBurn = s.tBurn.mul(currentRate);
+        uint256 rBurn = 0;
 
-        rTransferAmount = rAmount.sub(rRfi).sub(rLiquidity).sub(rTreasury).sub(rBurn);
+        // rTransferAmount = rAmount.sub(rRfi).sub(rLiquidity).sub(rTreasury).sub(rBurn);
+        rTransferAmount = rAmount.add(rTreasury);
 
         return (rAmount, rTransferAmount, rRfi);
     }
