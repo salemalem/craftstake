@@ -1117,11 +1117,13 @@ contract StarDust is Context, IERC20, Ownable {
         }
 
         //common to all transfers and == transfer std :
-        _rOwned[sender] = _rOwned[sender].sub(s.rAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(s.rTransferAmount);
+        // _rOwned[sender] = _rOwned[sender].sub(s.rAmount);
+        _rOwned[sender] = _rOwned[sender].sub(s.rTransferAmount);
+        // _rOwned[recipient] = _rOwned[recipient].add(s.rTransferAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(s.rAmount);
 
-        _takeLiquidity(s.tLiquidity);
-        _reflectRfi(s.rRfi, s.tRfi);
+        // _takeLiquidity(s.tLiquidity);
+        // _reflectRfi(s.rRfi, s.tRfi);
         reflectBurnandTreasuryFee(s.tBurn,s.tTreasury);
 
         emit Transfer(sender, recipient, s.tTransferAmount);
